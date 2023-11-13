@@ -1,9 +1,9 @@
 package christmas.view;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import christmas.domain.DiscountResult;
+import christmas.domain.EventBadge;
+import christmas.domain.Order;
 import java.util.List;
-import java.util.Map;
 
 public class OutputView {
     private static final String PREVIEW_MESSAGE = "12월 26일에 우테코 식당에서 받을 이벤트 혜택 미리 보기!";
@@ -19,26 +19,50 @@ public class OutputView {
     public static void printPreviewInformationalMessage() {
         System.out.println(PREVIEW_MESSAGE);
     }
-    public static void printOrderedMenuAndQuantity() {
+
+    public static void printOrderedMenuAndQuantity(List<Order> orders) {
         System.out.println("\n" + ORDERED_MENU_MESSAGE);
+        for (Order order : orders) {
+            System.out.println(order.getMenuName() + " " + order.getQuantity() + "개");
+        }
     }
-    public static void printTotalPaymentBeforeDiscount() {
+
+    public static void printTotalPaymentBeforeDiscount(int totalOrderAmountBeforeDiscount) {
         System.out.println("\n" + TOTAL_PAYMENT_BEFORE_DISCOUNT_MESSAGE);
+        System.out.println(totalOrderAmountBeforeDiscount);
     }
+
     public static void printGiftMenu() {
         System.out.println("\n" + GIFT_MENU_MESSAGE);
+        System.out.println("샴페인 1개");
     }
-    public static void printBenefitDetail() {
+
+    public static void printBenefitDetail(List<DiscountResult> results) {
         System.out.println("\n" + BENEFIT_DETAIL_MESSAGE);
+
+        if (results.isEmpty()) {
+            System.out.println("없음");
+            return;
+        }
+
+        results.stream()
+                .map(result -> result.getDiscountName() + ": -" + result.getDiscountAmount() + "원")
+                .forEach(System.out::println);
     }
-    public static void printTotalBenefitsAmount() {
+
+    public static void printTotalBenefitsAmount(int totalBenefitAmount) {
         System.out.println("\n" + TOTAL_BENEFITS_AMOUNT_MESSAGE);
+        System.out.println("-" + totalBenefitAmount + "원");
     }
-    public static void printExpectedPaymentAfterDiscount() {
+
+    public static void printExpectedPaymentAfterDiscount(int totalOrderAmountAfterDiscount) {
         System.out.println("\n" + EXPECTED_PAYMENT_AFTER_DISCOUNT_MESSAGE);
+        System.out.println(totalOrderAmountAfterDiscount + "원");
     }
-    public static void printDecemberBadge() {
+
+    public static void printDecemberEventBadge(EventBadge eventBadge) {
         System.out.println("\n" + DECEMBER_EVENT_BADGE_MESSAGE);
+        System.out.println(eventBadge);
     }
 
     public static void printErrorMessage(String detailErrorMessage) {
