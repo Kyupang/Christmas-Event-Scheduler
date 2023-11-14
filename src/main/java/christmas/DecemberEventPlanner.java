@@ -5,8 +5,13 @@ import christmas.domain.EventBadge;
 import christmas.domain.Order;
 import christmas.service.DiscountCalculatorService;
 import christmas.service.OrderService;
+import christmas.util.OrderParser;
+import christmas.validation.MenuAndQuantityValidator;
+import christmas.validation.VisitDayInputValidator;
+import christmas.validation.WarningValidator;
 import christmas.view.InputView;
 import christmas.view.OutputView;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DecemberEventPlanner {
@@ -15,6 +20,7 @@ public class DecemberEventPlanner {
     private List<DiscountResult> discountResults;
     private int totalBenefitsAmount;
     private int totalOrderAmountBeforeDiscount;
+    private boolean eventPossible;
 
     private final OrderService orderService;
     private final DiscountCalculatorService discountCalculatorService;
@@ -37,12 +43,12 @@ public class DecemberEventPlanner {
     }
 
     private void inputVisitDay() {
-       boolean validInput = false;
+        boolean validInput = false;
         while (!validInput) {
             try {
-                String expectedVisitDayInput = InputView.inputExpectedDate();
-                //VisitDayInputValidator.validate(expectedVisitDay);
-                expectedVisitDay = Integer.parseInt(expectedVisitDayInput);
+                String expectedVisitDateInput = InputView.inputExpectedDate();
+                VisitDayInputValidator.validate(expectedVisitDateInput);
+                expectedVisitDay = Integer.parseInt(expectedVisitDateInput);
                 validInput = true;
             } catch (IllegalArgumentException e) {
                 OutputView.printErrorMessage(e.getMessage());
@@ -55,23 +61,15 @@ public class DecemberEventPlanner {
         while (!validInput) {
             try {
                 String menuAndQuantityInput = InputView.inputMenuAndQuantity();
-                //MenuAndQuantityValidator.validate(menuAndQuantityInput);
-                //Map menuAndQuantity = 주의사항(menuAndQuantityInput);
-                //파싱하고
-                //Order로 만드는 클래스 함수(menuAndQuantity);
-                String[] orderTokens = menuAndQuantityInput.split(",");
-                for (String orderToken : orderTokens) {
-                    String[] parts = orderToken.split("-");
-                    if (parts.length == 2) {
-                        String menu = parts[0].trim();
-                        int quantity = Integer.parseInt(parts[1].trim());
+                MenuAndQuantityValidator.validate(menuAndQuantityInput);
+                WarningValidator.validateWarning(menuAndQuantityInput);
+                eventPossible = WarningValidator.EventApplicability(menuAndQuantityInput);
+                List<Order> parsedOrders = OrderParser.parseOrders(menuAndQuantityInput);
 
-                        Order order = new Order(menu, quantity);
-                        orderService.recordOrder(order);
-                    }
+                for (Order order : parsedOrders) {
+                    orderService.recordOrder(order);
                 }
 
-                //Service로 보내는것도 저기서 하자
                 validInput = true;
             } catch (IllegalArgumentException e) {
                 OutputView.printErrorMessage(e.getMessage());
@@ -81,26 +79,33 @@ public class DecemberEventPlanner {
 
     // 주문 메뉴 출력하기 (주문메뉴 리스트) OrderService.getOrderRecord 하면 될듯
     private void printOrders() {
+        OutputView.printPreviewInformationalMessage();
         orders = orderService.getAllOrderRecord();
         OutputView.printOrderedMenuAndQuantity(orders);
     }
+
     // 주문메뉴의 가격을 가지고 총 계산 금액 계산하고 출력하기 (총 계산금액) OrderService.getOrderRecord에서 가격 가져와서 출력
     private void calculateTotalOrderAmountBeforeDiscount() {
         orders = orderService.getAllOrderRecord();
         totalOrderAmountBeforeDiscount = discountCalculatorService.calculateTotalOrderAmountBeforeDiscount(orders);
         OutputView.printTotalPaymentBeforeDiscount(totalOrderAmountBeforeDiscount);
     }
+
     // 총금액으로 증정 메뉴 있는지 없는지(총금액) 판단 후 증정내역 출력하기
     private void checkGiftMenu() {
         orders = orderService.getAllOrderRecord();
-        if(discountCalculatorService.applyChampagneGift(totalOrderAmountBeforeDiscount)) {
-            OutputView.printGiftMenu();
-        }
+        OutputView.printGiftMenu(discountCalculatorService.applyChampagneGift(totalOrderAmountBeforeDiscount));
     }
 
     // 할인 정책(날짜)에 따라 할인 적용하고 할인 내역 출력하기 result = DiscountCalculatorService.discount();
     // OutputView.resultPrint(result);
     private void calculateBenefitsDetails() {
+        if (!eventPossible) {
+            discountResults = new ArrayList<>();
+            OutputView.printBenefitDetail(discountResults);
+            return;
+        }
+
         discountResults = discountCalculatorService.calculateDiscounts(expectedVisitDay);
         OutputView.printBenefitDetail(discountResults);
     }
@@ -110,6 +115,7 @@ public class DecemberEventPlanner {
         totalBenefitsAmount = discountCalculatorService.calculateTotalBenefitAmount(discountResults);
         OutputView.printTotalBenefitsAmount(totalBenefitsAmount);
     }
+
     // 할인 후 금액(할인내역) 계산하고 출력하기 (총금액 - 혜택 금액)
     private void calculateTotalOrderAmountAfterDiscount() {
         int totalOrderAmountAfterDiscount = totalOrderAmountBeforeDiscount - totalBenefitsAmount;
