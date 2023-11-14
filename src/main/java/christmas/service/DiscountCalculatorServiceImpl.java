@@ -53,10 +53,7 @@ public class DiscountCalculatorServiceImpl implements DiscountCalculatorService 
 
     @Override
     public boolean applyChampagneGift(int totalOrderAmountBeforeDiscount) {
-        if (totalOrderAmountBeforeDiscount > 120000) {
-            return true;
-        }
-        return false;
+        return totalOrderAmountBeforeDiscount > 120000;
     }
 
     public int calculateTotalBenefitAmount(List<DiscountResult> results) {
