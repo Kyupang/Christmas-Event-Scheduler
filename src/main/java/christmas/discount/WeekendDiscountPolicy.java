@@ -8,13 +8,14 @@ import java.util.List;
 
 public class WeekendDiscountPolicy implements DiscountPolicy {
     private static final String POLICY_NAME = "주말 할인";
+    private static final String DISCOUNT_MENU = "메인";
     private static final int DISCOUNT_AMOUNT_PER_ITEM = 2023;
 
     @Override
     public int discount(LocalDate currentDate, List<Order> orderList) {
         int totalDiscountAmount = 0;
         for (Order order : orderList) {
-            if (Menu.valueOf(order.getMenuName()).getCategory().equals("메인")) {
+            if (Menu.valueOf(order.getMenuName()).getCategory().equals(DISCOUNT_MENU)) {
                 totalDiscountAmount += DISCOUNT_AMOUNT_PER_ITEM * order.getQuantity();
             }
         }

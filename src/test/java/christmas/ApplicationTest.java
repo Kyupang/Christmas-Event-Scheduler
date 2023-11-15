@@ -4,6 +4,15 @@ import static camp.nextstep.edu.missionutils.test.Assertions.assertSimpleTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import camp.nextstep.edu.missionutils.test.NsTest;
+import christmas.discount.ChristmasDdayDiscountPolicy;
+import christmas.discount.SpecialDiscountPolicy;
+import christmas.discount.WeekdayDiscountPolicy;
+import christmas.discount.WeekendDiscountPolicy;
+import christmas.repository.MemoryOrderRepository;
+import christmas.repository.OrderRepository;
+import christmas.service.DiscountCalculatorServiceImpl;
+import java.util.Arrays;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class ApplicationTest extends NsTest {

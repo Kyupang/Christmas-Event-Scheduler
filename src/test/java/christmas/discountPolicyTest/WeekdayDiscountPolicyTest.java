@@ -24,7 +24,7 @@ public class WeekdayDiscountPolicyTest {
     @DisplayName("평일 할인 정책이 적용 가능한 경우 (월요일)")
     @Test
     public void testIsApplicableWeekday() {
-        LocalDate applicableDate = LocalDate.of(2023, Month.DECEMBER, 11); // 월요일
+        LocalDate applicableDate = LocalDate.of(2023, Month.DECEMBER, 11);
         boolean isApplicable = discountPolicy.isApplicable(applicableDate);
 
         assertThat(isApplicable).isTrue();
@@ -33,7 +33,7 @@ public class WeekdayDiscountPolicyTest {
     @DisplayName("평일 할인 정책이 적용 불가능한 경우 (금요일)")
     @Test
     public void testIsNotApplicableFriday() {
-        LocalDate notApplicableDate = LocalDate.of(2023, Month.DECEMBER, 15); // 금요일
+        LocalDate notApplicableDate = LocalDate.of(2023, Month.DECEMBER, 15);
         boolean isApplicable = discountPolicy.isApplicable(notApplicableDate);
 
         assertThat(isApplicable).isFalse();
@@ -42,7 +42,7 @@ public class WeekdayDiscountPolicyTest {
     @DisplayName("평일 할인 정책이 적용 불가능한 경우 (토요일)")
     @Test
     public void testIsNotApplicableSaturday() {
-        LocalDate notApplicableDate = LocalDate.of(2023, Month.DECEMBER, 16); // 토요일
+        LocalDate notApplicableDate = LocalDate.of(2023, Month.DECEMBER, 16);
         boolean isApplicable = discountPolicy.isApplicable(notApplicableDate);
 
         assertThat(isApplicable).isFalse();
@@ -59,7 +59,6 @@ public class WeekdayDiscountPolicyTest {
 
         int discountAmount = discountPolicy.discount(LocalDate.of(2023, Month.DECEMBER, 11), orderList);
 
-        // 예상된 할인 금액은 디저트 카테고리의 주문에 대해 DISCOUNT_AMOUNT_PER_ITEM * 주문 수량의 총합입니다.
         int expectedDiscountAmount = 2023 * (3 + 2);
 
         assertThat(discountAmount).isEqualTo(expectedDiscountAmount);
@@ -75,7 +74,6 @@ public class WeekdayDiscountPolicyTest {
 
         int discountAmount = discountPolicy.discount(LocalDate.of(2023, Month.DECEMBER, 11), orderList);
 
-        // 적용 대상이 없는 경우 할인 금액은 0이어야 합니다.
         assertThat(discountAmount).isEqualTo(0);
     }
 }

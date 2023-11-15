@@ -6,7 +6,10 @@ import java.util.List;
 
 public interface DiscountCalculatorService {
     List<DiscountResult> calculateDiscounts(int expectedDate);
+
     int calculateTotalOrderAmountBeforeDiscount(List<Order> orders);
+
     boolean applyChampagneGift(int totalOrderAmountBeforeDiscount);
+
     int calculateTotalBenefitAmount(List<DiscountResult> results);
 }

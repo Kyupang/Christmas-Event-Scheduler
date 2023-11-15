@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DiscountCalculatorServiceImpl implements DiscountCalculatorService {
+    private static final String GIFT_EVENT_MESSAGE = "증정 이벤트";
+    private static final int GIFT_EVENT_DISCOUNT_AMOUNT = 25000;
+    private static final int GIFT_EVENT_THRESHOLD = 120000;
     private final List<DiscountPolicy> discountPolicies;
     private final OrderRepository orderRepository;
 
@@ -36,7 +39,7 @@ public class DiscountCalculatorServiceImpl implements DiscountCalculatorService 
             }
         }
         if (applyChampagneGift(calculateTotalOrderAmountBeforeDiscount(orderList))) {
-            discountResults.add(new DiscountResult("증정 이벤트", 25000));
+            discountResults.add(new DiscountResult(GIFT_EVENT_MESSAGE, GIFT_EVENT_DISCOUNT_AMOUNT));
         }
         return discountResults;
     }
@@ -53,7 +56,7 @@ public class DiscountCalculatorServiceImpl implements DiscountCalculatorService 
 
     @Override
     public boolean applyChampagneGift(int totalOrderAmountBeforeDiscount) {
-        return totalOrderAmountBeforeDiscount > 120000;
+        return totalOrderAmountBeforeDiscount > GIFT_EVENT_THRESHOLD;
     }
 
     public int calculateTotalBenefitAmount(List<DiscountResult> results) {

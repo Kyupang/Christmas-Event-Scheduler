@@ -25,7 +25,7 @@ public class OrderServiceTest {
     @DisplayName("주문 서비스 기록 테스트")
     @Test
     public void testRecordOrder() {
-        Order order1 = new Order("티본스테이스", 1);
+        Order order1 = new Order("티본스테이크", 1);
         orderService.recordOrder(order1);
         List<Order> orderServiceOrders = orderService.getAllOrderRecord();
 

@@ -24,9 +24,9 @@ public class MenuAndQuantityValidator {
                 .toList();
 
         checkInputPattern(menuAndQuantityList);
-        checkMenuExactlyOnMenuBoard(menuAndQuantityList); //정확한 메뉴명인지 확인
-        checkMenuQuantity(menuAndQuantityList); // 개수가 0인지 확인
-        checkMenuDuplication(menuAndQuantityList); //메뉴이름이 제로콜라-1,제로콜라-1 처럼 두번 이상 나오는지 확인
+        checkMenuExactlyOnMenuBoard(menuAndQuantityList);
+        checkMenuQuantity(menuAndQuantityList);
+        checkMenuDuplication(menuAndQuantityList);
     }
 
 

@@ -49,17 +49,18 @@ public class WarningValidator {
         int totalAmount = 0;
 
         for (String menuAndQuantity : menuAndQuantityList) {
-                String[] parts = menuAndQuantity.split("-");
-                if (parts.length == 2) {
-                    String menu = parts[0].trim();
-                    int quantity = Integer.parseInt(parts[1].trim());
+            String[] parts = menuAndQuantity.split("-");
+            if (parts.length == 2) {
+                String menu = parts[0].trim();
+                int quantity = Integer.parseInt(parts[1].trim());
 
-                    totalAmount += Menu.valueOf(menu).getPrice() * quantity;
-                }
+                totalAmount += Menu.valueOf(menu).getPrice() * quantity;
+            }
         }
 
-        if (totalAmount < EVENT_THRESHOLD)
+        if (totalAmount < EVENT_THRESHOLD) {
             return false;
+        }
 
         return true;
     }

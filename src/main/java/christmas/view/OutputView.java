@@ -10,8 +10,10 @@ public class OutputView {
     private static final String ORDERED_MENU_MESSAGE = "<주문 메뉴>";
     private static final String TOTAL_PAYMENT_BEFORE_DISCOUNT_MESSAGE = "<할인 전 총주문 금액>";
     private static final String GIFT_MENU_MESSAGE = "<증정 메뉴>";
+    private static final String GIFT_MENU = "샴페인 1개";
     private static final String BENEFIT_DETAIL_MESSAGE = "<혜택 내역>";
     private static final String TOTAL_BENEFITS_AMOUNT_MESSAGE = "<총혜택 금액>";
+    private static final String NOTHING_BENEFITS = "0원";
     private static final String EXPECTED_PAYMENT_AFTER_DISCOUNT_MESSAGE = "<할인 후 예상 결제 금액>";
     private static final String DECEMBER_EVENT_BADGE_MESSAGE = "<12월 이벤트 배지>";
     private static final String NOT_APPLICABLE_FOR_BENEFITS_MESSAGE = "없음";
@@ -24,8 +26,12 @@ public class OutputView {
     public static void printOrderedMenuAndQuantity(List<Order> orders) {
         System.out.println("\n" + ORDERED_MENU_MESSAGE);
         for (Order order : orders) {
-            System.out.println(order.getMenuName() + " " + order.getQuantity() + "개");
+            printOrderedMenu(order);
         }
+    }
+
+    private static void printOrderedMenu(Order order) {
+        System.out.println(order.getMenuName() + " " + order.getQuantity() + "개");
     }
 
     public static void printTotalPaymentBeforeDiscount(int totalOrderAmountBeforeDiscount) {
@@ -35,11 +41,13 @@ public class OutputView {
 
     public static void printGiftMenu(boolean giftPossible) {
         System.out.println("\n" + GIFT_MENU_MESSAGE);
-        if (giftPossible) {
-            System.out.println("샴페인 1개");
+
+        if (!giftPossible) {
+            System.out.println(NOT_APPLICABLE_FOR_BENEFITS_MESSAGE);
             return;
         }
-        System.out.println(NOT_APPLICABLE_FOR_BENEFITS_MESSAGE);
+
+        System.out.println(GIFT_MENU);
     }
 
     public static void printBenefitDetail(List<DiscountResult> results) {
@@ -59,7 +67,7 @@ public class OutputView {
         System.out.println("\n" + TOTAL_BENEFITS_AMOUNT_MESSAGE);
 
         if (totalBenefitAmount == 0) {
-            System.out.println("0원");
+            System.out.println(NOTHING_BENEFITS);
             return;
         }
 
