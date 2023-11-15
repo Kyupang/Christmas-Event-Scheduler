@@ -7,18 +7,14 @@ import java.util.List;
 public class OrderParser {
     public static List<Order> parseOrders(String menuAndQuantityInput) {
         List<Order> orders = new ArrayList<>();
-        String[] orderTokens = menuAndQuantityInput.split(",");
 
-        for (String orderToken : orderTokens) {
-            String[] parts = orderToken.split("-");
+        for (String orderToken : menuAndQuantityInput.split(",")) {
+            String[] parts = orderToken.trim().split("-");
             if (parts.length == 2) {
-                String menu = parts[0].trim();
-                int quantity = Integer.parseInt(parts[1].trim());
-
-                Order order = new Order(menu, quantity);
-                orders.add(order);
+                orders.add(new Order(parts[0].trim(), Integer.parseInt(parts[1].trim())));
             }
         }
+
         return orders;
     }
 }

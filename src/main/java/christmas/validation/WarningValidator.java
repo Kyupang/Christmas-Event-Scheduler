@@ -51,17 +51,10 @@ public class WarningValidator {
         for (String menuAndQuantity : menuAndQuantityList) {
             String[] parts = menuAndQuantity.split("-");
             if (parts.length == 2) {
-                String menu = parts[0].trim();
-                int quantity = Integer.parseInt(parts[1].trim());
-
-                totalAmount += Menu.valueOf(menu).getPrice() * quantity;
+                totalAmount += Menu.valueOf(parts[0].trim()).getPrice() * Integer.parseInt(parts[1].trim());
             }
         }
 
-        if (totalAmount < EVENT_THRESHOLD) {
-            return false;
-        }
-
-        return true;
+        return totalAmount >= EVENT_THRESHOLD;
     }
 }
